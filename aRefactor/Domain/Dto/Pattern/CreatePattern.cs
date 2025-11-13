@@ -21,7 +21,7 @@ public class CreateRequestPattern
 
         if (string.IsNullOrWhiteSpace(Slug))
         {
-            throw new ArgumentException("Pattern slug cannot be empty.");
+            throw new ProjectException(Response.SlugCannotBeEmpty.GetDescriptionOfEnum());
         }
     }
 }

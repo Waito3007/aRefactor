@@ -25,6 +25,7 @@ public enum Response
     
     [Description("Tên không được trống")]
     NameCannotBeEmpty = 100,
-    
+    [Description("Slug không được trống")]
+    SlugCannotBeEmpty = 101,
     #endregion
 }

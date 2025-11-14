@@ -6,7 +6,7 @@ public enum Response
 {
     #region Default
 
-    [Description("Thanh cong.")]
+    [Description("Thành công.")]
     Success = 0,
     [Description("Ban khong co quyen thuc hien hanh dong nay.")]
     Forbidden = 1,
@@ -27,5 +27,16 @@ public enum Response
     NameCannotBeEmpty = 100,
     [Description("Slug không được trống")]
     SlugCannotBeEmpty = 101,
+    [Description("Request có trường không được null")]
+    RequestCannotBeNull = 102,
+    [Description("CategoryId không được trống")]
+    CategoryIdCannotBeEmpty = 103,
+    #endregion
+
+    #region Transaction
+
+    [Description("Transaction chưa bắt đầu")]
+    TransactionNotStarted = 200,
+    
     #endregion
 }

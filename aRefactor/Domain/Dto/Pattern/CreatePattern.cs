@@ -5,12 +5,12 @@ namespace aRefactor.Domain.Dto;
 
 public class CreateRequestPattern
 {
-    public Guid Id { get; set; }
     public string Name { get; set; }
     public string Slug { get; set; }
     public string Summary { get; set; }
     public string Problem { get; set; }
     public string Solution { get; set; }
+    public Guid CategoryId { get; set; }
 
     public void Validate()
     {
@@ -28,5 +28,5 @@ public class CreateRequestPattern
 
 public class CreateResponsePattern
 {
-
+    public string Name { get; set; }
 }

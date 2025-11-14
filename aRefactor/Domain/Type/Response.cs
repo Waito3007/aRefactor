@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using aRefactor.Domain.Dto;
 using aRefactor.Extension;
 using ResponseMessage = aRefactor.Domain.Exception.Response;
 
@@ -14,7 +15,8 @@ public class Response
     public int StatusCode { get; set; }
     public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
-    public static Response SuccessResponse(ResponseMessage messageKey = ResponseMessage.Success, string? messageOverride = null)
+    public static Response SuccessResponse(CreateResponsePattern result,
+        ResponseMessage messageKey = ResponseMessage.Success, string? messageOverride = null)
     {
         return new Response
         {

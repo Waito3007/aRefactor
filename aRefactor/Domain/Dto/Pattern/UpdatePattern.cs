@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using aRefactor.Domain.Exception;
 using aRefactor.Extension;
 
 namespace aRefactor.Domain.Dto;
 
-public class CreateRequestPattern
+
+public class UpdateRequestPattern
 {
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Slug { get; set; } = string.Empty;
     public string Summary { get; set; } = string.Empty;
@@ -27,8 +29,11 @@ public class CreateRequestPattern
     }
 }
 
-public class CreateResponsePattern
+public class UpdateResponsePattern
 {
     public string Name { get; set; } = string.Empty;
+    public string Slug { get; set; } = string.Empty;
+    public string Summary { get; set; } = string.Empty;
+    public string Problem { get; set; } = string.Empty;
+    public string Solution { get; set; } = string.Empty;
 }
-

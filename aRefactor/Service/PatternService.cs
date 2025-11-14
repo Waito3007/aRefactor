@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.Net;
 using AutoMapper;
 using aRefactor.Domain.Dto;
@@ -27,8 +27,8 @@ public class PatternService : IPatternService
         _patternRepository = patternRepository;
         _mapper = mapper;
     }
-        
-    public async Task<CreateRequestPattern> CreatePatternAsync(CreateRequestPattern request)
+
+    public async Task<CreateResponsePattern> CreatePatternAsync(CreateRequestPattern request)
     {
         if (request == null)
         {
@@ -36,7 +36,7 @@ public class PatternService : IPatternService
         }
 
         request.Validate();
-        
+
         var pattern = _mapper.Map<Pattern>(request);
         pattern.Id = Guid.NewGuid();
 
@@ -63,8 +63,81 @@ public class PatternService : IPatternService
                 Response.InternalServerError);
         }
 
-        request.Name = pattern.Name;
+        return _mapper.Map<CreateResponsePattern>(pattern);
+    }
 
-        return request;
+    public async Task<UpdateResponsePattern> UpdatePatternAsync(UpdateRequestPattern request)
+    {
+        if (request == null)
+        {
+            throw new ProjectException(Response.RequestCannotBeNull.GetDescriptionOfEnum());
+        }
+
+        request.Validate();
+
+        var pattern = await _patternRepository.GetByIdAsync(request.Id);
+        if (pattern == null)
+        {
+            throw new NotFoundException("Pattern", request.Id);
+        }
+
+        _mapper.Map(request, pattern);
+
+        try
+        {
+            await _unitOfWork.BeginTransaction();
+            _patternRepository.Update(pattern);
+            await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.CommitTransaction();
+        }
+        catch (ProjectException)
+        {
+            await _unitOfWork.RollbackTransaction();
+            throw;
+        }
+        catch (DbUpdateException ex)
+        {
+            await _unitOfWork.RollbackTransaction();
+            throw new ProjectException(
+                "Khong the cap nhat pattern vao luc nay.",
+                ex,
+                HttpStatusCode.InternalServerError,
+                "PATTERN_UPDATE_FAILED",
+                Response.InternalServerError);
+        }
+
+        return _mapper.Map<UpdateResponsePattern>(pattern);
+    }
+
+    public async Task<GetResponsePattern> GetPatternAsync(GetRequestPattern request)
+    {
+        if (request == null)
+        {
+            throw new ProjectException(Response.RequestCannotBeNull.GetDescriptionOfEnum());
+        }
+
+        request.Validate();
+
+        Pattern? pattern;
+        try
+        {
+            pattern = await _patternRepository.GetBySlug(request.Slug);
+        }
+        catch (DbUpdateException ex)
+        {
+            throw new ProjectException(
+                "Khong the lay pattern vao luc nay.",
+                ex,
+                HttpStatusCode.InternalServerError,
+                "PATTERN_GET_FAILED",
+                Response.InternalServerError);
+        }
+
+        if (pattern == null)
+        {
+            throw new NotFoundException("Pattern", request.Slug);
+        }
+
+        return _mapper.Map<GetResponsePattern>(pattern);
     }
 }

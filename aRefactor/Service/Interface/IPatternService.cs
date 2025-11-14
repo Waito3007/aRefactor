@@ -4,5 +4,7 @@ namespace aRefactor.Service.Interface;
 
 public interface IPatternService
 {
-    Task<CreateRequestPattern> CreatePatternAsync(CreateRequestPattern requestPattern);
+    Task<CreateResponsePattern> CreatePatternAsync(CreateRequestPattern requestPattern);
+    Task<UpdateResponsePattern> UpdatePatternAsync(UpdateRequestPattern requestPattern);
+    Task<GetResponsePattern> GetPatternAsync(GetRequestPattern requestPattern); 
 }
